@@ -13,5 +13,3 @@ gem 'pg'
 group :production do
   gem 'puma'
 end
-
-
