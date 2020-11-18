@@ -1,5 +1,6 @@
 require 'erubis'
 require 'sinatra'
+require 'sinatra/json'
 require 'bcrypt'
 
 configure do
@@ -10,4 +11,11 @@ end
 
 get '/' do
   send_file 'index.html'
+end
+
+
+post '/' do
+  obj = JSON.parse request.body.read
+
+  json(obj, :encoder => :to_json, :content_type => :json)
 end
