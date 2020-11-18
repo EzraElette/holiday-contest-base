@@ -1,0 +1,37 @@
+{
+	"folders": [
+		{
+			"path": "../../DigitalClock"
+		},
+		{
+			"path": "../GuessingGame"
+		},
+		{
+			"path": "../InputBox"
+		},
+		{
+			"path": "../../JS230/EventsAndAsynchronousProgramming"
+		},
+		{
+			"path": "../../JS230/HTTPRequestsFromJavaScript"
+		},
+		{
+			"path": "../../../Downloads/areas_of_continents_node"
+		},
+		{
+			"path": "../../../Downloads/templated-industrious"
+		},
+		{
+			"path": "../../../Downloads/autocomplete_node"
+		},
+		{
+			"path": "../../JS230/JavaScriptLibraries"
+		},
+		{
+			"path": "../../JS230/Projects"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Projects"
+	}
+}

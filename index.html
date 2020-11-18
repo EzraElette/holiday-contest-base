@@ -27,6 +27,13 @@
         color: white;
       }
 
+      #logged-in-menu, #not-logged-in-menu {
+        display: flex;
+        justify-content: space-around;
+        border: 1px solid white;
+        border-radius: 10px;
+      }
+    
       #ingredients {
         border: 1px dotted black;
         border-radius: 10px;
@@ -101,16 +108,16 @@
     <script type="text/x-handlebars" id="headerTemplate">
       <nav id="navigation">
         {{#if loggedIn}}
-        <ul>
-          <li><a href="/profile">{{person.name}}profile</a></li>
-          <li><a href="/photos">Submissions</a></li>
-          <li><a href="/logout"></a>Create A New Account</li>
+        <ul id='logged-in-menu'>
+          <li class='menu-item'><a href="/profile">{{person.name}}profile</a></li>
+          <li class='menu-item'><a href="/photos">Submissions</a></li>
+          <li class='menu-item'><a href="/logout"></a>Create A New Account</li>
         </ul>
         {{else}}
-          <ul>
-            <li><a href="/profile">My profile</a></li>
-            <li><a href="/photos">Submissions</a></li>
-            <li><a href="/logout"></a>Create A New Account</li>
+          <ul id='not-logged-in-menu'>
+            <li class='menu-item'><a href="/profile">My profile</a></li>
+            <li class='menu-item'><a href="/photos">Submissions</a></li>
+            <li class='menu-item'><a href="/logout"></a>Create A New Account</li>
           </ul>
         {{/if}}
       </nav>
@@ -168,8 +175,10 @@
 
     <script>
       const mainTemplate = Handlebars.compile($("#mainTemplate").html());
+      const headerTemplate = Handlebars.compile($("#headerTemplate").html());
       let current = {};
-      document.body.innerHTML = mainTemplate(current);
+      $('main').html(mainTemplate(current));
+      $('header').html(headerTemplate(current))
       // document.body.innerHTML = mainTemplate(templateObject);
       // let xhr = new XMLHttpRequest();
       // xhr.open('GET', 'https://api.kanye.rest')
