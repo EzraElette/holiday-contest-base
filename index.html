@@ -94,6 +94,12 @@
   <body>
     
     <script type="text/x-handlebars" id="quoteTemplate">
+      {{#if flash}}
+        <section id='flash-message'>
+          <h4>Thanks, {{name},</h4>
+          <h4> your {{ingredient}} was added!</h4>
+        </section>
+      {{/if}}
       {{#if person}}
         <h1>Welcome Back!</h1>
         <blockquote class='individual-name'>{{person.name}}</blockquote>
@@ -113,8 +119,6 @@
               <button type="submit" class='add-button'>+</button>
             </section>
           </form>
-
-
         </section>
       
       {{else}}
@@ -155,6 +159,16 @@
       //   document.body.innerHTML = quoteTemplate(templateObject);         // 
       // });
       // xhr.send();
+      let xhr = new XMLHttpRequest();
+      xhr.open('POST', '/add/ingredient');
+      xhr.setRequestHeader('content-type', 'application/json');
+      xhr.responseType = 'json'
+      xhr.addEventListener('load', event => {
+        let response = xhr.response;
+        response.flash = true
+      })
+      let data = {name: 'Ezra', 'ingredient': 'apple'};
+      xhr.send(data);
     </script>
   </body>
 </html>
