@@ -2,22 +2,21 @@
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
-    <script> 
+    <script>
       // GET https://api.kanye.rest
-      const templateObject = {
-        "person": {
-          "name": "Rodney",
-          "selectedIngredients": [
-            {"name": "Turkey", 'details': 'info' },
-            {"name": "Yam"},
-            {"name": "Pie"}
-          ],
-        }
-      };
+      // const templateObject = {
+      //   person: {
+      //     name: "Rodney",
+      //     selectedIngredients: [
+      //       { name: "Turkey", details: "info" },
+      //       { name: "Yam" },
+      //       { name: "Pie" },
+      //     ],
+      //   },
+      // };
       // https://www.google.com/search?q=thanksgiving+colors&sxsrf=ALeKk00O8DwdN2upRzp6BVDDhZx57TqlUw:1605646251987&tbm=isch&source=iu&ictx=1&fir=EkU8M1NVqv7W3M%252CENb2SSGL7roorM%252C_&vet=1&usg=AI4_-kSEwpf-97YS9WxlzkcGIYesmmWjtA&sa=X&ved=2ahUKEwiJ6--zuortAhUBnlkKHWgLAO0Q9QF6BAgQEEs#imgrc=9Qga8IJicFgcwM
     </script>
     <style>
-      
       .individual-name {
         text-align: center;
         border-bottom: 1px solid white;
@@ -27,7 +26,7 @@
         background-color: #1d2126;
         color: white;
       }
-      
+
       #ingredients {
         border: 1px dotted black;
         border-radius: 10px;
@@ -37,78 +36,101 @@
         justify-content: space-around;
         color: black;
       }
-      
+
       .single-ingredient {
         border: 1px dotted black;
         border-radius: 10px;
         padding: 1.5rem;
       }
       .single-ingredient:hover {
-        background-color: rgba(0, 0, 0, .1);
-        
+        background-color: rgba(0, 0, 0, 0.1);
       }
-      
+
       .login {
-/*         border: 1px solid black; */
+        /*         border: 1px solid black; */
         width: 70%;
         margin: 20px auto;
-        box-shadow: 2px 2px 4px 2px rgba(1,1,1,1);
+        box-shadow: 2px 2px 4px 2px rgba(1, 1, 1, 1);
       }
-      
-      .login, .form-input {
-        
+
+      .login,
+      .form-input {
         display: flex;
         flex-direction: column;
         align-items: center;
       }
-      
+
       .form-input {
         margin: 20px 0;
       }
       .add-button {
-        
-/*         width: 8px;
-        height: 8px; */
-/*         text-align: center; */
-/*         width: 15px;
-        height: 15px;
-        text-align: center;
-        vertical-align: middle;*/
-        background-color: rgba(0,0,0,.1);
+        /*         width: 8px;
+              height: 8px; */
+        /*         text-align: center; */
+        /*         width: 15px;
+              height: 15px;
+              text-align: center;
+              vertical-align: middle;*/
+        background-color: rgba(0, 0, 0, 0.1);
         border: 2px solid brown;
         line-height: 1.2rem;
         font-size: 1.2em;
         border-radius: 50%;
-        box-shadow: 1px 1px 1px 1px rgba(0,0,0,.1);
+        box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
         color: brown;
-/*         font-size: larger; */
-/*         background-color: white; */
-/*         color: black; */ */
+        /*         font-size: larger; */
+        /*         background-color: white; */
+        /*         color: black; */
       }
-      
+
       .add-button:hover {
         background-color: darkorange;
       }
     </style>
   </head>
   <body>
-    
-    <script type="text/x-handlebars" id="quoteTemplate">
+    <header>
+
+    </header>
+    <main>
+
+    </main>
+    <footer>
+
+    </footer>
+    <script type="text/x-handlebars" id="headerTemplate">
+      <nav id="navigation">
+        {{#if loggedIn}}
+        <ul>
+          <li><a href="/profile">{{person.name}}profile</a></li>
+          <li><a href="/photos">Submissions</a></li>
+          <li><a href="/logout"></a>Create A New Account</li>
+        </ul>
+        {{else}}
+          <ul>
+            <li><a href="/profile">My profile</a></li>
+            <li><a href="/photos">Submissions</a></li>
+            <li><a href="/logout"></a>Create A New Account</li>
+          </ul>
+        {{/if}}
+      </nav>
+    </script>
+    <script type="text/x-handlebars" id="mainTemplate">
       {{#if flash}}
         <section id='flash-message'>
-          <h4>Thanks, {{name},</h4>
-          <h4> your {{ingredient}} was added!</h4>
+          <h4>{{flash.message}},</h4>
+          <h4> {{flash.action}}</h4>
         </section>
       {{/if}}
       {{#if person}}
         <h1>Welcome Back!</h1>
         <blockquote class='individual-name'>{{person.name}}</blockquote>
         <section id='ingredients'>
-        
+
         {{#each person.selectedIngredients}}
           <p class='single-ingredient'>{{name}}</p>
         {{/each}}
-        
+
         <section class='add-ingredient'>
           <form id='add-ingredients-form' action="/login" method="POST">
             <section class='form-input'>
@@ -120,7 +142,7 @@
             </section>
           </form>
         </section>
-      
+
       {{else}}
         <section class='login'>
           <form id='login-form' action="/login" method="POST">
@@ -133,42 +155,70 @@
               <input id="password" name="password" type="password">
             </section>
             <section class='form-input'>
-              <button type="submit">Login</button>
+              <button type="submit" id="login-button">Login</button>
             </section>
           </form>
 
           <a href="#">Create Account</a>
         </section>
       {{/if }}
-      
-      
     </script>
-    
+
     <h1>Hello, World</h1>
-    
-    <script> 
-      
-      const quoteTemplate = Handlebars.compile($('#quoteTemplate').html());
-      document.body.innerHTML = quoteTemplate(templateObject)
+
+    <script>
+      const mainTemplate = Handlebars.compile($("#mainTemplate").html());
+      let current = {};
+      document.body.innerHTML = mainTemplate(current);
+      // document.body.innerHTML = mainTemplate(templateObject);
       // let xhr = new XMLHttpRequest();
       // xhr.open('GET', 'https://api.kanye.rest')
       // xhr.responseType = 'json';
       // xhr.addEventListener('load', event => {
       //   console.log(xhr.response);
       //   let p = document.createElement('p');
-      //   document.body.innerHTML = quoteTemplate(templateObject);         // 
+      //   document.body.innerHTML = mainTemplate(templateObject);         //
       // });
       // xhr.send();
-      let xhr = new XMLHttpRequest();
-      xhr.open('POST', '/add/ingredient');
-      xhr.setRequestHeader('content-type', 'application/json');
-      xhr.responseType = 'json'
-      xhr.addEventListener('load', event => {
-        let response = xhr.response;
-        response.flash = true
-      })
-      let data = {name: 'Ezra', 'ingredient': 'apple'};
-      xhr.send(data);
+      // let loggedIn;
+      document.addEventListener("DOMContentLoaded", () => {
+        // loggedIn = null;
+        let $form = $("#login-form");
+        $form.submit(function (event) {
+          event.preventDefault();
+          let login = new XMLHttpRequest();
+          login.responseType = "json";
+          login.open("POST", "/login");
+          login.addEventListener("load", (event) => {
+            let response = login.response;
+            current = JSON.parse(response);
+            // current["loggedIn"] = loggedIn.loggedIn;
+            // console.log(current["loggedIn"]);
+            console.log(current);
+            document.body.innerHTML = mainTemplate(current);
+          });
+          let data = new FormData($form[0]);
+          login.send(data);
+        });
+      });
+      // let add = document.querySelector(".add-ingredient");
+      document.addEventListener("click", (event) => {
+        if (event.target.tagName !== "BUTTON") return;
+        // let xhr = new XMLHttpRequest();
+        // xhr.open("POST", "/add/ingredient");
+        // xhr.setRequestHeader("Content-Type", "application/json");
+        // xhr.setRequestHeader("Authentication", "auth_TOKEN");
+        // xhr.responseType = "json";
+        // xhr.addEventListener("load", (event) => {
+        //   let response = JSON.parse(xhr.response);
+        //   // true;
+        //   response.flash = { message: "test message", action: "test action" };
+        //   document.body.innerHTML = mainTemplate(response);
+        //   console.log(response);
+        // });
+        // let data = { name: "Ezra", ingredient: "apple" };
+        // xhr.send(JSON.stringify(data));
+      });
     </script>
   </body>
 </html>
