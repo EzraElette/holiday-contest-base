@@ -85,9 +85,59 @@
         border-radius: 50%;
         box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
         color: brown;
-        /*         font-size: larger; */
-        /*         background-color: white; */
-        /*         color: black; */
+      }
+
+      .navigation {
+        overflow: hidden;
+        background-color: white;
+      }
+
+      .navigation a {
+        float: left;
+        display: block;
+        color: black;
+        text-align: center;
+        padding: 14px 16px;
+        border: 1px dotted black;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 17px;
+      }
+      .navigation .icon {
+        display: none;
+      }
+
+      .navigation a:hover {
+        background-color: #dddddd;
+        color: black;
+      }
+
+      .navigation a.active {
+        border: 1px solid white;
+        background-color: black;
+        color: honeydew;
+      }
+      
+      @media screen and (max-width: 600px) {
+        .navigation a:not(:first-child) {display: none;}
+        .navigation a.icon {
+          float: right;
+          display: block;
+        }
+      }
+
+      @media screen and (max-width: 600px) {
+        .navigation.responsive { position: relative;}
+        .navigation.responsive .icon {
+          position: absolute;
+          right: 0;
+          top: 0;
+        }
+        .navigation.responsive a {
+          float: none;
+          display: block;
+          text-align: left;
+        }
       }
 
       .add-button:hover {
@@ -106,27 +156,33 @@
 
     </footer>
     <script type="text/x-handlebars" id="headerTemplate">
-      <nav id="navigation">
+      <nav class="navigation" id='navigation'>
         {{#if loggedIn}}
-        <ul id='logged-in-menu'>
-          <li class='menu-item'><a href="/profile">{{person.name}}profile</a></li>
-          <li class='menu-item'><a href="/photos">Submissions</a></li>
-          <li class='menu-item'><a href="/logout"></a>Create A New Account</li>
-        </ul>
+          <a class='menu-item active' href="/">Home</a>
+          <a class='menu-item'href="/profile">{{person.name}}'s Profile</a>
+          <a class='menu-item' href="/photos">Submissions</a>
+          <a class='menu-item' href="/logout">Create A New Account</a>
         {{else}}
-          <ul id='not-logged-in-menu'>
-            <li class='menu-item'><a href="/profile">My profile</a></li>
-            <li class='menu-item'><a href="/photos">Submissions</a></li>
-            <li class='menu-item'><a href="/logout"></a>Create A New Account</li>
-          </ul>
+            <a class='menu-item active' href="/" class='menu-link'>Sign In</a>
+            <a class='menu-item' href="/create-account" class='menu-link'>Create A New Account</a>
         {{/if}}
+          <a href="javascript:void(0)" class='icon' onclick="toggleMenu()">
+            <i class='fa fa-bars'></i>
+          </a>
       </nav>
+    </script>
+
+    <script>
+      function toggleMenu() {
+        let nav = document.getElementById('navigation')
+        nav.classList.toggle('responsive')
+      }
     </script>
     <script type="text/x-handlebars" id="mainTemplate">
       {{#if flash}}
         <section id='flash-message'>
-          <h4>{{flash.message}},</h4>
-          <h4> {{flash.action}}</h4>
+          <h4>{{flash.message}}</h4>
+          <h4>{{flash.action}}</h4>
         </section>
       {{/if}}
       {{#if person}}
@@ -149,8 +205,9 @@
             </section>
           </form>
         </section>
-
-      {{else}}
+      {{/if }}
+    </script>
+    <script id='loginTemplate' type='text/x-handlebars'>
         <section class='login'>
           <form id='login-form' action="/login" method="POST">
             <section class='form-input'>
@@ -168,7 +225,6 @@
 
           <a href="#">Create Account</a>
         </section>
-      {{/if }}
     </script>
 
     <h1>Hello, World</h1>
@@ -176,9 +232,24 @@
     <script>
       const mainTemplate = Handlebars.compile($("#mainTemplate").html());
       const headerTemplate = Handlebars.compile($("#headerTemplate").html());
+      const loginTemplate = Handlebars.compile($('#loginTemplate').html())
       let current = {};
-      $('main').html(mainTemplate(current));
-      $('header').html(headerTemplate(current))
+      function refresh(scope) {
+        if (scope === 'header') {
+          $('header').html(headerTemplate(current))
+        } else if (scope === 'main') {
+          if (current['loggedIn']) {
+            $('main').html(mainTemplate(current));
+          } else {
+            $('main').html(loginTemplate(current));
+          }
+        } else if (scope === undefined) {
+          refresh('header');
+          refresh('main');
+        }
+      }
+      
+      refresh();
       // document.body.innerHTML = mainTemplate(templateObject);
       // let xhr = new XMLHttpRequest();
       // xhr.open('GET', 'https://api.kanye.rest')
@@ -204,7 +275,8 @@
             // current["loggedIn"] = loggedIn.loggedIn;
             // console.log(current["loggedIn"]);
             console.log(current);
-            document.body.innerHTML = mainTemplate(current);
+            refresh()
+            current.flash = null;
           });
           let data = new FormData($form[0]);
           login.send(data);
