@@ -16,6 +16,7 @@
       // };
       // https://www.google.com/search?q=thanksgiving+colors&sxsrf=ALeKk00O8DwdN2upRzp6BVDDhZx57TqlUw:1605646251987&tbm=isch&source=iu&ictx=1&fir=EkU8M1NVqv7W3M%252CENb2SSGL7roorM%252C_&vet=1&usg=AI4_-kSEwpf-97YS9WxlzkcGIYesmmWjtA&sa=X&ved=2ahUKEwiJ6--zuortAhUBnlkKHWgLAO0Q9QF6BAgQEEs#imgrc=9Qga8IJicFgcwM
     </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
       .individual-name {
         text-align: center;
@@ -27,6 +28,12 @@
         color: white;
       }
 
+      main.logged-in {
+        /* display: flex;
+        flex-direction: column;
+        justify-content: space-around; */
+        background-color: tomato;
+      }
       #logged-in-menu, #not-logged-in-menu {
         display: flex;
         justify-content: space-around;
@@ -46,15 +53,16 @@
 
       .single-ingredient {
         border: 1px dotted black;
+        position: center;
         border-radius: 10px;
         padding: 1.5rem;
       }
+
       .single-ingredient:hover {
         background-color: rgba(0, 0, 0, 0.1);
       }
 
       .login {
-        /*         border: 1px solid black; */
         width: 70%;
         margin: 20px auto;
         box-shadow: 2px 2px 4px 2px rgba(1, 1, 1, 1);
@@ -71,13 +79,7 @@
         margin: 20px 0;
       }
       .add-button {
-        /*         width: 8px;
-              height: 8px; */
-        /*         text-align: center; */
-        /*         width: 15px;
-              height: 15px;
-              text-align: center;
-              vertical-align: middle;*/
+
         background-color: rgba(0, 0, 0, 0.1);
         border: 2px solid brown;
         line-height: 1.2rem;
@@ -89,16 +91,16 @@
 
       .navigation {
         overflow: hidden;
-        background-color: white;
       }
 
       .navigation a {
         float: left;
         display: block;
+        background-color: white;
         color: black;
         text-align: center;
         padding: 14px 16px;
-        border: 1px dotted black;
+        border: 1px dotted white;
         border-radius: 10px;
         text-decoration: none;
         font-size: 17px;
@@ -140,9 +142,28 @@
         }
       }
 
+      #flash-message {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin-top: 5px;
+        border: 1px solid black;
+        background-color: white;
+        color: black;
+        border-radius: 10px;
+      }
+
+      #flash-message h4 {
+        padding: 4px;
+        border: 1px dotted black;
+        color: white;
+        background-color: darkorange;
+        border-radius: 10px;
+      }
       .add-button:hover {
         background-color: darkorange;
       }
+
     </style>
   </head>
   <body>
@@ -186,7 +207,7 @@
         </section>
       {{/if}}
       {{#if person}}
-        <h1>Welcome Back!</h1>
+        <h1 class='section-heading'>What would you like to do?</h1>
         <blockquote class='individual-name'>{{person.name}}</blockquote>
         <section id='ingredients'>
 
@@ -205,7 +226,20 @@
             </section>
           </form>
         </section>
+        <section class='current-ingredients'>
+          <h2 class='section-heading'>Current Ingredients</h2>
+          {{#if person.hasIngredients}}
+            {{#each person.chosenIngredients}}
+              <p class='single-ingredient'>{{name}}</p>
+            {{/each}}
+          {{else}}
+            <form action="/assign-ingredients" method='POST'>
+              <button class='add-button' type='submit'>Get Random Ingredients!</button>
+            </form>
+          {{/if}}
+        </section>
       {{/if }}
+ 
     </script>
     <script id='loginTemplate' type='text/x-handlebars'>
         <section class='login'>
@@ -239,9 +273,9 @@
           $('header').html(headerTemplate(current))
         } else if (scope === 'main') {
           if (current['loggedIn']) {
-            $('main').html(mainTemplate(current));
+            $('main').addClass('logged-in').html(mainTemplate(current))
           } else {
-            $('main').html(loginTemplate(current));
+            $('main').removeClass('logged-in').html(loginTemplate(current));
           }
         } else if (scope === undefined) {
           refresh('header');
@@ -274,7 +308,8 @@
             current = JSON.parse(response);
             // current["loggedIn"] = loggedIn.loggedIn;
             // console.log(current["loggedIn"]);
-            console.log(current);
+            current.person.hasIngredients = true;
+            current.person.chosenIngredients = [{name: 'apple'}, {name:'pie'}]
             refresh()
             current.flash = null;
           });
