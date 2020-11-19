@@ -4,6 +4,7 @@ require 'sinatra'
 require 'sinatra/json'
 require 'bcrypt'
 require 'json'
+require_relative 'database_persistence.rb'
 
 configure do
   enable :sessions
@@ -17,7 +18,7 @@ configure(:development) do
 end
 
 before do
-  @storage = DatabasePersistence.new(logger)
+  @storage = DatabasePersistence.new()
 end
 
 after do
@@ -28,17 +29,10 @@ def escape_html(html)
   Rack::Utils.escape_html(html)
 end
 
-def user_list
-  # user_list = YAML.load_file(File.join(data_path, 'users.yml') )
-  # user_list ? user_list : {}
-  ["Rodney", "Ezra"]
-end
-
 def verify_credentials(username, password)
-  # return false if user_list[username].nil? || password.empty?
-  # BCrypt::Password.new(user_list[username]) == password
+  password_hash = @storage.get_user_pass(username)
 
-  user_list.include?(username) && password == 'password'
+  BCrypt::Password.new(password_hash) == password
 end
 
 def signed_in?
@@ -50,11 +44,11 @@ get '/' do
   send_file 'index.html'
 end
 
-post '/add/ingredient' do
-  request.body.rewind
-  # puts(JSON.parse(request.body.read).to_json)
-  json JSON.parse(request.body.read).to_json
-end
+# post '/add/ingredient' do
+#   request.body.rewind
+#   # puts(JSON.parse(request.body.read).to_json)
+#   json JSON.parse(request.body.read).to_json
+# end
 
 post '/login' do
   username = escape_html(params[:username])
@@ -62,15 +56,41 @@ post '/login' do
 
   logged_in = verify_credentials(username, password)
 
+  return unless logged_in
+    # session[:user_id] = @storage.get_user_id(username) || nil
+
   response = {}
 
   response['loggedIn'] = logged_in
-  response['person'] = {'name' => 'Rodney', 'specialIngredients' => []}
+
+  response['person'] = {'name' => username, 'selectedIngredients' => []}
   response['flash'] = {'message' => 'Logged in!', 'action' => 'Happy Thanksgiving week!'}
+
+  # @storage.add_ingredient(params[:add_ingredient], session[:user_id])
+
   json response.to_json
 end
 
+post '/add/ingredient' do
+  ingredient_name = params[:ingredient]
+  response = {}
+  # response['person'] = {'selectedIngredients' => [{'name' => ingredient_name}]}
+  response['ingredient'] = {"name" => ingredient_name};
+  response['flash'] = {'message' => 'Ingredient(s) added!', 'action' => 'You can add more!'}
+  # response[:ingredient] = ingredient_name
+  json response.to_json
+  # redirect '/'
+  # @storage.add_ingredient(ingredient_name, session[:user_id])
+end
 
 post '/create/account' do
 #
+end
+
+post '/add/random/ingredients' do
+  response = {}
+
+  response['randomIngredients'] = [{name: "potato"}, {name: "yam"}, {name: "cranberry"}]
+
+  json response.to_json
 end

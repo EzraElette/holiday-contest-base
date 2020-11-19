@@ -7,7 +7,7 @@ CREATE TABLE users(
 CREATE TABLE images(
   id serial PRIMARY KEY,
   encodedImage text NOT NULL UNIQUE,
-  userid int NOT NULL REFERENCES user(id) ON DELETE CASCADE
+  userid int NOT NULL REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE ingredients(
@@ -17,6 +17,6 @@ CREATE TABLE ingredients(
 
 CREATE TABLE user_ingredients(
   id serial PRIMARY KEY,
-  userid int NOT NULL REFERENCES user(id) ON DELETE CASCADE,
-  ingredientid int NOT NULL REFERENCES ingredients(id) ON DELETE CASCADE,
+  userid int NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  ingredientid int NOT NULL REFERENCES ingredients(id) ON DELETE CASCADE
 );

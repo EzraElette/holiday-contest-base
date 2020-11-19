@@ -16,7 +16,10 @@
       // };
       // https://www.google.com/search?q=thanksgiving+colors&sxsrf=ALeKk00O8DwdN2upRzp6BVDDhZx57TqlUw:1605646251987&tbm=isch&source=iu&ictx=1&fir=EkU8M1NVqv7W3M%252CENb2SSGL7roorM%252C_&vet=1&usg=AI4_-kSEwpf-97YS9WxlzkcGIYesmmWjtA&sa=X&ved=2ahUKEwiJ6--zuortAhUBnlkKHWgLAO0Q9QF6BAgQEEs#imgrc=9Qga8IJicFgcwM
     </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
     <style>
       .individual-name {
         text-align: center;
@@ -34,14 +37,15 @@
         justify-content: space-around; */
         background-color: tomato;
       }
-      #logged-in-menu, #not-logged-in-menu {
+      #logged-in-menu,
+      #not-logged-in-menu {
         display: flex;
         justify-content: space-around;
         border: 1px solid white;
         border-radius: 10px;
       }
 
-      #ingredients {
+      .ingredients {
         border: 1px dotted black;
         border-radius: 10px;
         display: flex;
@@ -79,7 +83,6 @@
         margin: 20px 0;
       }
       .add-button {
-
         background-color: rgba(0, 0, 0, 0.1);
         border: 2px solid brown;
         line-height: 1.2rem;
@@ -119,9 +122,11 @@
         background-color: black;
         color: honeydew;
       }
-      
+
       @media screen and (max-width: 600px) {
-        .navigation a:not(:first-child) {display: none;}
+        .navigation a:not(:first-child) {
+          display: none;
+        }
         .navigation a.icon {
           float: right;
           display: block;
@@ -129,7 +134,9 @@
       }
 
       @media screen and (max-width: 600px) {
-        .navigation.responsive { position: relative;}
+        .navigation.responsive {
+          position: relative;
+        }
         .navigation.responsive .icon {
           position: absolute;
           right: 0;
@@ -163,19 +170,12 @@
       .add-button:hover {
         background-color: darkorange;
       }
-
     </style>
   </head>
   <body>
-    <header>
-
-    </header>
-    <main>
-
-    </main>
-    <footer>
-
-    </footer>
+    <header></header>
+    <main></main>
+    <footer></footer>
     <script type="text/x-handlebars" id="headerTemplate">
       <nav class="navigation" id='navigation'>
         {{#if loggedIn}}
@@ -195,8 +195,8 @@
 
     <script>
       function toggleMenu() {
-        let nav = document.getElementById('navigation')
-        nav.classList.toggle('responsive')
+        let nav = document.getElementById("navigation");
+        nav.classList.toggle("responsive");
       }
     </script>
     <script type="text/x-handlebars" id="mainTemplate">
@@ -209,56 +209,54 @@
       {{#if person}}
         <h1 class='section-heading'>What would you like to do?</h1>
         <blockquote class='individual-name'>{{person.name}}</blockquote>
-        <section id='ingredients'>
-
-        {{#each person.selectedIngredients}}
-          <p class='single-ingredient'>{{name}}</p>
-        {{/each}}
-
+        <section class='ingredients'>
+          {{#each person.selectedIngredients}}
+            <p class='single-ingredient'>{{name}}</p>
+          {{/each}}
+        </section>
         <section class='add-ingredient'>
-          <form id='add-ingredients-form' action="/login" method="POST">
+          <form id='add-ingredients-form' action="/add/ingredient" method="POST">
             <section class='form-input'>
-              <label for="username">Add Ingredient:</label>
-              <input id='add-ingredient" name="add-ingredient" type="text" value='name'>
+              <label for="ingredient">Add Ingredient:</label>
+              <input id="add-ingredient" name="ingredient" type="text" value='name'>
             </section>
             <section class='form-input'>
               <button type="submit" class='add-button'>+</button>
             </section>
           </form>
         </section>
-        <section class='current-ingredients'>
-          <h2 class='section-heading'>Current Ingredients</h2>
-          {{#if person.hasIngredients}}
-            {{#each person.chosenIngredients}}
+        <section class='ingredients'>
+          <h2 class='section-heading'>Random Ingredients</h2>
+          {{#if person.randomIngredients}}
+            {{#each person.randomIngredients}}
               <p class='single-ingredient'>{{name}}</p>
             {{/each}}
           {{else}}
-            <form action="/assign-ingredients" method='POST'>
-              <button class='add-button' type='submit'>Get Random Ingredients!</button>
+            <form id='random-ingredients' action="/add/random/ingredients" method='POST'>
+              <button id='assign-ingredients' type='submit'>Get Random Ingredients!</button>
             </form>
           {{/if}}
         </section>
       {{/if }}
- 
     </script>
-    <script id='loginTemplate' type='text/x-handlebars'>
-        <section class='login'>
-          <form id='login-form' action="/login" method="POST">
-            <section class='form-input'>
-              <label for="username">Username:</label>
-              <input id="username" name="username" type="text">
-            </section>
-            <section class='form-input'>
-              <label for="password">Password:</label>
-              <input id="password" name="password" type="password">
-            </section>
-            <section class='form-input'>
-              <button type="submit" id="login-button">Login</button>
-            </section>
-          </form>
+    <script id="loginTemplate" type="text/x-handlebars">
+      <section class='login'>
+        <form id='login-form' action="/login" method="POST">
+          <section class='form-input'>
+            <label for="username">Username:</label>
+            <input id="username" name="username" type="text">
+          </section>
+          <section class='form-input'>
+            <label for="password">Password:</label>
+            <input id="password" name="password" type="password">
+          </section>
+          <section class='form-input'>
+            <button type="submit" id="login-button">Login</button>
+          </section>
+        </form>
 
-          <a href="#">Create Account</a>
-        </section>
+        <a href="#">Create Account</a>
+      </section>
     </script>
 
     <h1>Hello, World</h1>
@@ -266,23 +264,70 @@
     <script>
       const mainTemplate = Handlebars.compile($("#mainTemplate").html());
       const headerTemplate = Handlebars.compile($("#headerTemplate").html());
-      const loginTemplate = Handlebars.compile($('#loginTemplate').html())
+      const loginTemplate = Handlebars.compile($("#loginTemplate").html());
       let current = {};
       function refresh(scope) {
-        if (scope === 'header') {
-          $('header').html(headerTemplate(current))
-        } else if (scope === 'main') {
-          if (current['loggedIn']) {
-            $('main').addClass('logged-in').html(mainTemplate(current))
+        if (scope === "header") {
+          $("header").html(headerTemplate(current));
+        } else if (scope === "main") {
+          if (current["loggedIn"]) {
+            $("main").addClass("logged-in").html(mainTemplate(current));
           } else {
-            $('main').removeClass('logged-in').html(loginTemplate(current));
+            $("main").removeClass("logged-in").html(loginTemplate(current));
           }
         } else if (scope === undefined) {
-          refresh('header');
-          refresh('main');
+          refresh("header");
+          refresh("main");
         }
       }
-      
+
+      function getRandomIngredients(event) {
+        let form = document.querySelector("#random-ingredients");
+        // form.addEventListener("submit", (event) => {
+          event.preventDefault();
+          // let data = new FormData(form);
+          let xhr = new XMLHttpRequest();
+          xhr.open("POST", "/add/random/ingredients"); // lol // the s? yup
+          // console.log(data)
+          xhr.responseType = "json";
+          xhr.addEventListener("load", (event) => {
+            let response = JSON.parse(xhr.response);
+            // current.person.selectedIngredients.push(response.ingredient)
+            current.flash = {message:" here are your random ingredients!", action: "now, you can make a dish"};
+            current.person.randomIngredients = response.randomIngredients;
+            console.log(xhr)
+
+            refresh('main');
+            current.flash = null;
+          });
+          // let data = { name: "Ezra", ingredient: "apple" };
+          xhr.send();
+        // });
+      }
+
+      function submitIngredient(event) {
+        let form = document.querySelector("#add-ingredients-form");
+        // form.addEventListener("submit", (event) => {
+          event.preventDefault();
+          let data = new FormData(form);
+          let xhr = new XMLHttpRequest();
+          xhr.open("POST", "/add/ingredient");
+          xhr.responseType = "json";
+          xhr.addEventListener("load", (event) => {
+            let response = JSON.parse(xhr.response);
+            current.person.selectedIngredients.push(response.ingredient)
+            // console.log(current)
+            current.flash = response.flash
+            current.chosenIngredients = true;
+            refresh();
+            current.flash = null;
+            // console.log(current);
+          });
+          // let data = { name: "Ezra", ingredient: "apple" };
+          xhr.send(data);
+        // });
+      };
+
       refresh();
       // document.body.innerHTML = mainTemplate(templateObject);
       // let xhr = new XMLHttpRequest();
@@ -298,43 +343,43 @@
       document.addEventListener("DOMContentLoaded", () => {
         // loggedIn = null;
         let $form = $("#login-form");
-        $form.submit(function (event) {
+        $(document).submit(function (event) {
           event.preventDefault();
-          let login = new XMLHttpRequest();
-          login.responseType = "json";
-          login.open("POST", "/login");
-          login.addEventListener("load", (event) => {
-            let response = login.response;
-            current = JSON.parse(response);
-            // current["loggedIn"] = loggedIn.loggedIn;
-            // console.log(current["loggedIn"]);
-            current.person.hasIngredients = true;
-            current.person.chosenIngredients = [{name: 'apple'}, {name:'pie'}]
-            refresh()
-            current.flash = null;
-          });
-          let data = new FormData($form[0]);
-          login.send(data);
+          if (event.target.id === 'login-form') {
+
+            let login = new XMLHttpRequest();
+            login.responseType = "json";
+            login.open("POST", "/login");
+            login.addEventListener("load", (event) => {
+              let response = login.response;
+              current = JSON.parse(response);
+              // current["loggedIn"] = loggedIn.loggedIn;
+              // console.log(current["loggedIn"]);
+              // current.person.hasIngredients = true;
+              // current.person.selectedIngredients = [];
+              // --------- Checking for random ingredients -------
+              // current.person.randomIngredients = [
+              //   { name: "apple" },
+              //   { name: "pie" },
+              // ];
+
+              refresh();
+              current.flash = null;
+            });
+            let data = new FormData($form[0]);
+            login.send(data);
+          } else if (event.target.id === 'add-ingredients-form') {
+            submitIngredient(event);
+          } else if (event.target.id === 'random-ingredients') {
+            getRandomIngredients(event);
+          }
         });
       });
-      // let add = document.querySelector(".add-ingredient");
-      document.addEventListener("click", (event) => {
-        if (event.target.tagName !== "BUTTON") return;
-        // let xhr = new XMLHttpRequest();
-        // xhr.open("POST", "/add/ingredient");
-        // xhr.setRequestHeader("Content-Type", "application/json");
-        // xhr.setRequestHeader("Authentication", "auth_TOKEN");
-        // xhr.responseType = "json";
-        // xhr.addEventListener("load", (event) => {
-        //   let response = JSON.parse(xhr.response);
-        //   // true;
-        //   response.flash = { message: "test message", action: "test action" };
-        //   document.body.innerHTML = mainTemplate(response);
-        //   console.log(response);
-        // });
-        // let data = { name: "Ezra", ingredient: "apple" };
-        // xhr.send(JSON.stringify(data));
-      });
+        </script>
+    </body>
+
+  </html>
+
     </script>
   </body>
 </html>
