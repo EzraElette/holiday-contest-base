@@ -283,31 +283,25 @@
 
       function getRandomIngredients(event) {
         let form = document.querySelector("#random-ingredients");
-        // form.addEventListener("submit", (event) => {
-          event.preventDefault();
-          // let data = new FormData(form);
-          let xhr = new XMLHttpRequest();
-          xhr.open("POST", "/add/random/ingredients"); // lol // the s? yup
-          // console.log(data)
-          xhr.responseType = "json";
-          xhr.addEventListener("load", (event) => {
-            let response = JSON.parse(xhr.response);
-            // current.person.selectedIngredients.push(response.ingredient)
-            current.flash = {message:" here are your random ingredients!", action: "now, you can make a dish"};
-            current.person.randomIngredients = response.randomIngredients;
-            console.log(xhr)
+        event.preventDefault();
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "/add/random/ingredients");
+        xhr.responseType = "json";
+        xhr.addEventListener("load", (event) => {
+          let response = JSON.parse(xhr.response);
+          current.flash = {message:" here are your random ingredients!", action: "now, you can make a dish"};
+          current.person.randomIngredients = response.randomIngredients;
+          console.log(xhr)
 
-            refresh('main');
-            current.flash = null;
-          });
-          // let data = { name: "Ezra", ingredient: "apple" };
-          xhr.send();
-        // });
+          refresh('main');
+          current.flash = null;
+        });
+        
+        xhr.send();
       }
 
       function submitIngredient(event) {
         let form = document.querySelector("#add-ingredients-form");
-        // form.addEventListener("submit", (event) => {
           event.preventDefault();
           let data = new FormData(form);
           let xhr = new XMLHttpRequest();
@@ -316,30 +310,16 @@
           xhr.addEventListener("load", (event) => {
             let response = JSON.parse(xhr.response);
             current.person.selectedIngredients.push(response.ingredient)
-            // console.log(current)
             current.flash = response.flash
             current.chosenIngredients = true;
             refresh();
             current.flash = null;
-            // console.log(current);
           });
-          // let data = { name: "Ezra", ingredient: "apple" };
           xhr.send(data);
-        // });
       };
 
       refresh();
-      // document.body.innerHTML = mainTemplate(templateObject);
-      // let xhr = new XMLHttpRequest();
-      // xhr.open('GET', 'https://api.kanye.rest')
-      // xhr.responseType = 'json';
-      // xhr.addEventListener('load', event => {
-      //   console.log(xhr.response);
-      //   let p = document.createElement('p');
-      //   document.body.innerHTML = mainTemplate(templateObject);         //
-      // });
-      // xhr.send();
-      // let loggedIn;
+
       document.addEventListener("DOMContentLoaded", () => {
         // loggedIn = null;
         let $form = $("#login-form");
