@@ -113,8 +113,8 @@ let PrivateData = (function (template) {
 
 
 
-// console.log(PrivateData)   // Session {}
-
+console.log(PrivateData.logUserIn(sessionTemplate))  // Session {}
+// console.log(PrivateData.find('person', 'name'));
 // PrivateData.update({ person: { name: 'ezra' } });
 // console.log(Object.getOwnPropertyNames(PrivateData)); // []
 // PrivateData.logUserIn(sessionTemplate)
