@@ -1,0 +1,209 @@
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel='stylesheet' href='/stylesheets/main.css'/>
+  </head>
+  <body>
+    <header></header>
+    <main></main>
+    <footer></footer>
+    <script type="text/javascript" src="javascripts/session.js"></script>
+    <script type="text/x-handlebars" id="headerTemplate">
+      <nav class="navigation" id='navigation'>
+        {{#if loggedIn}}
+          <a class='menu-item active' href="/">Home</a>
+          <a class='menu-item'href="/profile">{{person.name}}'s Profile</a>
+          <a class='menu-item' href="/photos">Submissions</a>
+          <a class='menu-item' href="/logout">Log Out</a>
+        {{else}}
+            <a class='menu-item active' href="/" >Sign In</a>
+            <a class='menu-item create-account' href="/create-account">Create A New Account</a>
+        {{/if}}
+
+          <a href="javascript:void(0)" class='icon' onclick="toggleMenu()">
+            <i class='fa fa-bars'></i>
+          </a>
+      </nav>
+    </script>
+
+    <script>
+      function toggleMenu() {
+        let nav = document.getElementById("navigation");
+        nav.classList.toggle("responsive");
+      }
+    </script>
+    <script type="text/x-handlebars" id="mainTemplate">
+      {{#if flash}}
+        <section id='flash-message'>
+          <h4>{{flash.message}}</h4>
+          <h4>{{flash.action}}</h4>
+        </section>
+      {{/if}}
+      {{#if person}}
+        <h1 class='section-heading'>What would you like to do?</h1>
+        <blockquote class='individual-name'>{{person.name}}</blockquote>
+        <section class='ingredients'>
+          <h2 class='section-heading'>Added Ingredients:</h2>
+          {{#each person.selectedIngredients}}
+            <p class='single-ingredient'>{{name}}</p>
+          {{/each}}
+        </section>
+        <section class='add-ingredient'>
+          <form id='add-ingredients-form' action="/add/ingredient" method="POST">
+            <section class='form-input'>
+              <label for="ingredient">Add Ingredient:</label>
+              <input id="add-ingredient" name="ingredient" type="text" value='name'>
+            </section>
+            <section class='form-input'>
+              <button type="submit" class='add-button'>+</button>
+            </section>
+          </form>
+        </section>
+        <section class='ingredients'>
+          <h2 class='section-heading'>Random Ingredients</h2>
+          {{#if person.randomIngredients}}
+            {{#each person.randomIngredients}}
+              <p class='single-ingredient'>{{name}}</p>
+            {{/each}}
+          {{else}}
+            <form id='random-ingredients' action="/add/random/ingredients" method='POST'>
+              <button id='assign-ingredients' type='submit'>Get Random Ingredients!</button>
+            </form>
+          {{/if}}
+        </section>
+      {{/if }}
+    </script>
+    <script id="loginTemplate" type="text/x-handlebars">
+    {{#if flash}}
+        <section id='flash-message'>
+          <h4>{{flash.message}}</h4>
+          <h4>{{flash.action}}</h4>
+        </section>
+      {{/if}}
+      <section class='login'>
+        <form id='login-form' action="/login" method="POST">
+          <section class='form-input'>
+            <label for="username">Username:</label>
+            <input id="username" name="username" type="text">
+          </section>
+          <section class='form-input'>
+            <label for="password">Password:</label>
+            <input id="password" name="password" type="password">
+          </section>
+          <section class='form-input'>
+            <button type="submit" id="login-button">Login</button>
+          </section>
+        </form>
+
+        <a class='create-account' href="#">Create Account</a>
+      </section>
+    </script>
+    <h1>The Holiday Cook-Off</h1>
+    <script id='profileTemplate' type='text/x-handlebars'>
+      <blockquote class='individual-name'>{{person.name}}</blockquote>
+
+    </script>
+    <script id='createAccount' type='text/x-handlebars'>
+      <form class='create-account' action="/create/account" method="POST">
+            <input class='form-input' type="text" name="username" placeholder="Username" />
+            <input class='form-input' type="password" name="password" placeholder="Password" />
+            <input class='form-input' type="password" name="password2" placeholder="Password2" />
+            <input class='form-input' type="submit" name="button" value="Create Account" />
+      </form>
+    </script>
+    <script>
+      const mainTemplate = Handlebars.compile($("#mainTemplate").html());
+      const headerTemplate = Handlebars.compile($("#headerTemplate").html());
+      const loginTemplate = Handlebars.compile($("#loginTemplate").html());
+      const createAccountTemplate = Handlebars.compile($("#createAccount").html());
+      current = JSON.parse($('#current')[0].textContent);
+      console.log(current)
+      function refresh(scope) {
+        if (scope === "header") {
+          $("header").html(headerTemplate(current));
+        } else if (scope === "main") {
+          if (current["loggedIn"]) {
+            $("main").addClass("logged-in").html(mainTemplate(current));
+          } else {
+            $("main").removeClass("logged-in").html(loginTemplate(current));
+          }
+        } else if (scope === undefined) {
+          refresh("header");
+          refresh("main");
+        }
+      }
+
+      // function getRandomIngredients(event) {
+      //   let form = document.querySelector("#random-ingredients");
+      //   event.preventDefault();
+      //   let xhr = new XMLHttpRequest();
+      //   xhr.open("POST", "/add/random/ingredients");
+      //   xhr.responseType = "json";
+      //   xhr.addEventListener("load", (event) => {
+      //     let response = JSON.parse(xhr.response);
+      //     console.log(xhr)
+
+      //     refresh('main');
+      //     current.flash = null;
+      //   });
+
+      //   xhr.send();
+      // }
+
+      function submitIngredient(event) {
+        let form = document.querySelector("#add-ingredients-form");
+          event.preventDefault();
+
+          let data = new FormData(form);
+          let xhr = new XMLHttpRequest();
+          xhr.open("POST", "/add/ingredient");
+          xhr.responseType = "json";
+          xhr.addEventListener("load", (event) => {
+            let response = JSON.parse(xhr.response);
+            // current.person.selectedIngredients.push(response.ingredient)
+            // current.flash = response.flash
+            // current.chosenIngredients = true;
+            refresh();
+            current.flash = null;
+          });
+          xhr.send(data);
+      };
+
+      refresh();
+
+      document.addEventListener("DOMContentLoaded", () => {
+        $('a.create-account').click(function(event) {
+          event.preventDefault();
+          $('#login-form').replaceWith(createAccountTemplate($('#createAccount').html()))
+        })
+
+        $(document).submit(function (event) {
+          // event.preventDefault();
+          if (event.target.id === 'login-form') {
+
+            let login = new XMLHttpRequest();
+            login.responseType = "json";
+            login.open("POST", "/login");
+            login.addEventListener("load", (event) => {
+              let response = login.response;
+              // current = JSON.parse(response);
+              refresh();
+              current.flash = null;
+
+            });
+            let data = new FormData($form[0]);
+            login.send(data);
+          } else if (event.target.id === 'add-ingredients-form') {
+            // submitIngredient(event);
+          } else if (event.target.id === 'random-ingredients') {
+            // getRandomIngredients(event);
+          }
+        });
+      });
+        </script>
+    </body>
+</html>
