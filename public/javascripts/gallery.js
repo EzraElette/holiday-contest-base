@@ -6,8 +6,13 @@ $(function () {
 
     request.addEventListener('load', function () {
       let $voteCount = $(event.target).parent('.vote-area').find('.vote-count');
+      const p = document.createElement('p');
 
       $voteCount.text((+$voteCount.text() + 1) + '');
+      p.textContent = 'voted';
+
+      console.log(event.currentTarget);
+      $(event.currentTarget)[0].replaceWith(p);
     });
 
     let data = $(event.target).data('id');

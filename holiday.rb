@@ -172,7 +172,7 @@ end
 get '/photos' do
   require_signed_in_user
 
-  @photos = @storage.get_photos
+  @photos = @storage.get_photos(session[:user_id])
 
   erb :photos
 end
@@ -193,7 +193,7 @@ end
 post '/vote' do
   id = request.body.read
 
-  @storage.vote_for(id)
+  @storage.vote_for(id, session[:user_id])
   res = { message: 'You voted!', action: ''}
   json res.to_json
 end

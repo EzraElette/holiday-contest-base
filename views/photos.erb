@@ -13,13 +13,17 @@
   <header>Photo gallery</header>
   <main class="photo-gallery">
     <% @photos.each do |photo| %>
+    <%p photo[:voted]%>
       <figure>
         <img src="<%== photo[:src]%>">
         <figcaption><%== photo[:name]%></figcaption>
         <div class="vote-area">
           <h3>Current number of votes: <strong class="vote-count"><%== photo[:votes] || 0 %></strong></h3>
-          <p class="vote-button" data-id="<%== photo[:id] %>">Vote for this dish</p>
-
+          <% if photo[:liked] %>
+            <p>voted</p>
+          <% else %>
+            <p class="vote-button" data-id="<%== photo[:id] %>">Vote for this dish</p>
+          <% end %>
         </div>
       </figure>
     <% end %>

@@ -136,15 +136,24 @@ class DatabasePersistence
     query(sql, username, password)
   end
 
-  def get_photos
-    sql = <<~SQL
+  def get_photos(user_id)
+
+    # select all images.
+    # if image id is included in liked images add liked true else liked false
+    # images.encodedImage,
+    images_sql = <<~SQL
       TABLE images;
     SQL
 
-    arr = []
-    query(sql).each do |photo|
+    likes_sql = <<~SQL
+      SELECT imageid FROM user_likes WHERE userid = $1;
+    SQL
 
-      arr << {src: photo["encodedimage"], name: photo["name"], votes: photo['votes'], id: photo['id'] }
+    liked_img = query(likes_sql, user_id.to_i).map { |t| t['imageid'] }
+
+    arr = []
+    query(images_sql).each do |photo|
+      arr << {src: photo["encodedimage"], name: photo["name"], votes: photo['votes'], id: photo['id'], liked: liked_img.include?(photo['id']) }
     end
     arr
   end
@@ -158,14 +167,19 @@ class DatabasePersistence
     query(sql, encodedImage, user_id, imageName)
   end
 
-  def vote_for(id)
-    p id
+  def vote_for(image_id, user_id)
     sql = <<~SQL
       UPDATE images
          SET votes = votes + 1
        WHERE id = $1;
     SQL
-    query(sql, id.to_i)
+    query(sql, image_id.to_i)
+
+    sql = <<~SQL
+      INSERT INTO user_likes (userid, imageid) VALUES ($2, $1);
+    SQL
+
+    query(sql, image_id.to_i, user_id.to_i)
   end
 
   private
