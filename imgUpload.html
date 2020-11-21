@@ -12,7 +12,18 @@
 
             var newImage = document.createElement('img');
             newImage.src = srcData;
-
+            // new xml request
+            // post to /add/img
+            // --> add this to the db
+            // --> close connection
+            // submission -> a page full of pictures and info about pictures.
+            // profile -> a person can submit pictures, and when pic is submitted, a picture will be shown
+            // with name and name of dish.
+            // person = {
+              // submittedIMGURL: 'string';
+            //}
+            // add img to html
+            // replace the place holder.
             document.getElementById("imgTest").innerHTML = newImage.outerHTML;
             alert("Converted Base64 version is " + document.getElementById("imgTest").innerHTML);
             console.log("Converted Base64 version is " + document.getElementById("imgTest").innerHTML);

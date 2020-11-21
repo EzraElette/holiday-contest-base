@@ -30,6 +30,12 @@ after do
   clear_flash(session) if request.path_info[-1] == '/'
 end
 
+def require_signed_in_user
+  if !session[:user_id]
+    redirect '/'
+  end
+end
+
 def escape_html(html)
   Rack::Utils.escape_html(html)
 end
@@ -64,7 +70,7 @@ post '/login' do
 
   logged_in = verify_credentials(username, password)
 
-  return unless logged_in
+  redirect '/' unless logged_in
 
   session[:user_id] = @storage.get_user_id(username) || nil
   # p session[:user_id]
@@ -72,7 +78,7 @@ post '/login' do
   response = {}
 
   session[:current][:loggedIn] = logged_in
-  session[:current][:person] = {'name' => username, :selectedIngredients => @storage.get_ingredients(username)}
+  session[:current][:person] = {'name' => username, :selectedIngredients => @storage.get_ingredients(username), :randomIngredients => @storage.get_random_ingredients(username) }
   # response['person'] = {'name' => username, 'selectedIngredients' => []}
   session[:current][:flash] = {'message' => 'Logged in!', 'action' => 'Happy Thanksgiving week!'}
 
@@ -83,6 +89,8 @@ post '/login' do
 end
 
 post '/add/ingredient' do
+  require_signed_in_user
+
   ingredient_name = params[:ingredient]
   response = {}
   if @storage.get_ingredients(session[:username]).count >= 5
@@ -130,19 +138,62 @@ post '/create/account' do
 end
 
 get '/logout' do
+  require_signed_in_user
+
   session.clear
 
   redirect '/'
 end
 
 post '/add/random/ingredients' do
+  require_signed_in_user
+
   response = {}
   session[:current] ||= {}
 
+  if @storage.get_random_ingredients(session[:username]).count > 0
+    session[:current][:flash] = {message:"You already have your random ingredients!", action: "Start cooking."};
+    redirect '/'
+  end
+
+  if @storage.get_ingredients(session[:username]).count < 5
+    session[:current][:flash] = {message:"Please add 5 ingredients first", action: "then you can get your random ingredients"};
+    redirect '/'
+  end
+
   session[:current][:flash] = {message:" here are your random ingredients!", action: "now, you can make a dish"};
 
-  @storage.get_random_ingredients(session[:username])
+  @storage.add_random_ingredients(session[:username])
 
-  session[:current][:person][:selectedIngredients] = @storage.get_ingredients(session[:username])
+  session[:current][:person][:randomIngredients] = @storage.get_random_ingredients(session[:username])
   redirect '/'
+end
+
+get '/photos' do
+  require_signed_in_user
+
+  @photos = @storage.get_photos
+
+  erb :photos
+end
+
+
+post '/add/image' do
+  require_signed_in_user
+
+  src = params[:imageData]
+  name = params[:name]
+  uploader = session[:user_id]
+
+  @storage.add_image(src, name, uploader)
+
+  redirect '/photos'
+end
+
+post '/vote' do
+  id = request.body.read
+
+  @storage.vote_for(id)
+  res = { message: 'You voted!', action: ''}
+  json res.to_json
 end

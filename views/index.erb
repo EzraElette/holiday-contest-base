@@ -56,7 +56,7 @@
           <form id='add-ingredients-form' action="/add/ingredient" method="POST">
             <section class='form-input'>
               <label for="ingredient">Add Ingredient:</label>
-              <input id="add-ingredient" name="ingredient" type="text" value='name'>
+              <input id="add-ingredient" name="ingredient" type="text" placeholder='name'>
             </section>
             <section class='form-input'>
               <button type="submit" class='add-button'>+</button>
@@ -71,7 +71,7 @@
             {{/each}}
           {{else}}
             <form id='random-ingredients' action="/add/random/ingredients" method='POST'>
-              <button id='assign-ingredients' type='submit'>Get Random Ingredients!</button>
+              <button id='assign-ingredients' type='submit'></button>Get Random Ingredients!</button>
             </form>
           {{/if}}
         </section>

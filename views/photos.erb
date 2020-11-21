@@ -1,0 +1,34 @@
+
+  <link rel="stylesheet" href="stylesheets/main.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
+  <script src="javascripts/gallery.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+  />
+</head>
+
+<body>
+  <header>Photo gallery</header>
+  <main class="photo-gallery">
+    <% @photos.each do |photo| %>
+      <figure>
+        <img src="<%== photo[:src]%>">
+        <figcaption><%== photo[:name]%></figcaption>
+        <div class="vote-area">
+          <h3>Current number of votes: <strong class="vote-count"><%== photo[:votes] || 0 %></strong></h3>
+          <p class="vote-button" data-id="<%== photo[:id] %>">Vote for this dish</p>
+
+        </div>
+      </figure>
+    <% end %>
+
+    <form id="image-upload" action="/add/image" method="POST">
+      <input type="file" name="image" id="image" required>
+      <input type="text" name="name" id="name" required>
+      <input type="hidden" id="imageData" name="imageData" required>
+      <button type="submit">Upload Image</button>
+    </form>
+  </main>
+</body>

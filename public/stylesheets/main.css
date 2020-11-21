@@ -6,6 +6,18 @@
   border-top: 2px solid #DDC9B4;
   color: #2a3d45;
 }
+
+figure {
+  margin: auto 0;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 25%;
+  padding: 2.5%;
+}
+
+figure img {
+  width: 100%;
+}
 body {
   background-color: #2A3D45;
   color: #DDC9B4;
