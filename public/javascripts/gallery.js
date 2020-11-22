@@ -1,4 +1,9 @@
 $(function () {
+
+    $('#upload-button').click(function(event) {
+      event.preventDefault();
+      refresh('upload-form')
+    });
   $('.vote-button').click(function (event) {
     let request = new XMLHttpRequest();
       // $(event.target).closest('figure').find('img').attr('id')
@@ -23,11 +28,10 @@ $(function () {
 
     request.send(data);
   });
-
+  
   let $imageInput = $('#image');
 
   $imageInput.change(function () {
-
     let selection = $('#image')[0].files[0];
     const fileReader = new FileReader();
 

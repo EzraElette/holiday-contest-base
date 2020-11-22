@@ -1,0 +1,127 @@
+.vote-button {
+  width: 90%;
+  border: 2px solid #DDC9B4;
+  border-radius: 10px;
+  background-color: #C17C74;
+  text-align: center;
+  color: #39535e;
+  padding: 5px;
+}
+
+.vote-button:hover {
+  /* padding: 15px; */
+  color: #BCAC9B;
+  /* border-radius: 4px; */
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+header {
+  padding-bottom: 10px;
+}
+
+main.photo-gallery {
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #DDC9B4;
+  border-radius: 10px;
+  margin: auto;
+  width: 70%;
+  background: #2A3D45;
+  box-shadow: inset -13px -13px 26px #1b272c,
+  inset 13px 13px 26px #39535e;
+}
+
+figure {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  border: 2px solid #DDC9B4;
+  border-radius: 10px;
+  /* width: 100%; */
+  padding: 10px;
+}
+
+figure img {
+  display: inline-block;
+  width: 90%;
+  height: 90%;
+}
+
+section.image {
+  display: inline-block;
+  border-right: 2px dotted #DDC9B4;
+  /* padding-right: ; */
+}
+
+section.vote-area {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-left: 10px;
+  font-size: 2vw;
+}
+
+#upload-button {
+  width: 90%;
+  font-size: 3vw;
+  background-color: #DDC9B4;
+  text-align: center;
+  border: inherit;
+  align-self: center;
+  padding-left: 10px;
+  border-radius: 10px;
+}
+
+
+#upload-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+
+#image-upload {
+  background-color: #C17C74; 
+  display:flex;
+  flex-direction: row;
+  justify-content: space-around;
+  height: 10vw;
+  width: 100%;
+}
+
+input {
+  height: 50%;
+  align-self: center;
+}
+
+form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 2vw;
+}
+
+form button, form input#name {
+  background-color: #39535e;
+  padding: 1px;
+  margin: 10px;
+  border-radius: 10px;
+}
+
+form button {
+  color: #BCAC9B;
+  font-size: 2vw;
+}
+form button:hover, form input#name {
+  background-color: #DDC9B4;
+  color: #39535e;
+}
+
+form input#image {
+  width: auto;
+  height: 2vw;
+  margin-left: -5px;
+  background-color: #39535e;
+  align-self: center;
+  vertical-align: center;
+  border-radius: 10px;
+}
