@@ -1,9 +1,6 @@
 $(function () {
 
-    $('#upload-button').click(function(event) {
-      event.preventDefault();
-      refresh('upload-form')
-    });
+
   $('.vote-button').click(function (event) {
     let request = new XMLHttpRequest();
       // $(event.target).closest('figure').find('img').attr('id')
@@ -12,7 +9,7 @@ $(function () {
     request.addEventListener('load', function () {
       let $voteCount = $(event.target).parent('.vote-area').find('.vote-count');
       const p = document.createElement('p');
-
+      p.classList.add('voted');
       $voteCount.text((+$voteCount.text() + 1) + '');
       p.textContent = 'voted';
 

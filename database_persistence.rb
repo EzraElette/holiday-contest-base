@@ -136,6 +136,30 @@ class DatabasePersistence
     query(sql, username, password)
   end
 
+  def get_my_photos(user_id)
+
+    # select all images.
+    # if image id is included in liked images add liked true else liked false
+    # images.encodedImage,
+    images_sql = <<~SQL
+      SELECT * FROM images WHERE userid = $1;
+    SQL
+    p 'we work in images';
+
+    likes_sql = <<~SQL
+      SELECT imageid FROM user_likes WHERE userid = $1;
+    SQL
+
+    liked_img = query(likes_sql, user_id.to_i).map { |t| t['imageid'] }
+    p 'we finished the query only problem is the array';
+
+    arr = []
+    query(images_sql, user_id).each do |photo|
+      arr << {src: photo["encodedimage"], name: photo["name"], votes: photo['votes'], id: photo['id'], liked: liked_img.include?(photo['id']) }
+    end
+    arr
+  end
+
   def get_photos(user_id)
 
     # select all images.

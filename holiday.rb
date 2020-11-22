@@ -1,6 +1,6 @@
 require 'erubis'
 require 'sinatra'
-# require 'sinatra/reloader'
+require 'sinatra/reloader'
 require 'sinatra/json'
 require 'bcrypt'
 require 'json'
@@ -54,6 +54,12 @@ end
 get '/' do
   # send_file 'index.html'
   erb :index
+end
+
+get '/profile' do
+  @name = session[:current][:person]['name']
+  @photos = @storage.get_my_photos(session[:user_id])
+  erb :profile
 end
 
 # post '/add/ingredient' do

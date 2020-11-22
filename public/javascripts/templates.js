@@ -1,4 +1,9 @@
-
+const theFlash = `{{#if flash}}
+    <section id='flash-message'>
+      <h4>{{flash.message}}</h4>
+      <h4>{{flash.action}}</h4>
+    </section>
+  {{/if}}`
 const theHeader = `<nav class="navigation" id='navigation'>
     {{#if loggedIn}}
       <a class='menu-item active' href="/">Home</a>
@@ -14,12 +19,7 @@ const theHeader = `<nav class="navigation" id='navigation'>
         <i class='fa fa-bars'></i>
       </a>
   </nav>`;
-const theMain = `{{#if flash}}
-        <section id='flash-message'>
-          <h4>{{flash.message}}</h4>
-          <h4>{{flash.action}}</h4>
-        </section>
-      {{/if}}
+const theMain = `${theFlash}
       {{#if person}}
         <h1 class='section-heading'>What would you like to do?</h1>
         <blockquote class='individual-name'>{{person.name}}</blockquote>
@@ -53,12 +53,7 @@ const theMain = `{{#if flash}}
           {{/if}}
         </section>
       {{/if }}`;
-const theLogin = `{{#if flash}}
-    <section id='flash-message'>
-      <h4>{{flash.message}}</h4>
-      <h4>{{flash.action}}</h4>
-    </section>
-  {{/if}}
+const theLogin = `${theFlash}
   <section class='login'>
     <form id='login-form' action="/login" method="POST">
       <section class='form-input'>
@@ -98,6 +93,7 @@ const headerTemplate = Handlebars.compile(theHeader);
 const loginTemplate = Handlebars.compile(theLogin);
 const createAccountTemplate = Handlebars.compile(theCreateAccount);
 const uploadFormTemplate = Handlebars.compile(theUploadForm);
+const flashTemplate = Handlebars.compile(theFlash);
 // const photosTemplate = Handlebars.compile(thePhotos)     
 current = JSON.parse($('#current')[0].textContent);
 function refresh(scope) {
@@ -114,7 +110,8 @@ function refresh(scope) {
   } else if (scope === 'upload-form') {
     $('#image-upload').show().closest('h1').show()
     $('#upload-button').css('display', 'none');
-    console.log($('h1').last().attr('css'))
+  } else if (scope === 'flash') {
+    $('main').html(flashTemplate(current) + $('main').html());
   } else if (scope === undefined) {
     refresh("header");
     refresh("main");

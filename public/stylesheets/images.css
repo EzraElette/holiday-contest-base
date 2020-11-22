@@ -9,9 +9,7 @@
 }
 
 .vote-button:hover {
-  /* padding: 15px; */
   color: #BCAC9B;
-  /* border-radius: 4px; */
   background-color: rgba(0, 0, 0, 0.2);
 }
 
@@ -19,6 +17,13 @@ header {
   padding-bottom: 10px;
 }
 
+.voted {
+  width: 100%;
+  background-color: #C17C74;
+  color: #39535e;
+  text-align: center;
+  border-radius: 10px;
+}
 main.photo-gallery {
   margin-top: 10%;
   display: flex;
@@ -38,7 +43,6 @@ figure {
   justify-content: center;
   border: 2px solid #DDC9B4;
   border-radius: 10px;
-  /* width: 100%; */
   padding: 10px;
 }
 
@@ -51,7 +55,6 @@ figure img {
 section.image {
   display: inline-block;
   border-right: 2px dotted #DDC9B4;
-  /* padding-right: ; */
 }
 
 section.vote-area {
