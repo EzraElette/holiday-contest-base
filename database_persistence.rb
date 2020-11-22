@@ -144,14 +144,14 @@ class DatabasePersistence
     images_sql = <<~SQL
       SELECT * FROM images WHERE userid = $1;
     SQL
-    p 'we work in images';
+    # p 'we work in images';
 
     likes_sql = <<~SQL
       SELECT imageid FROM user_likes WHERE userid = $1;
     SQL
 
     liked_img = query(likes_sql, user_id.to_i).map { |t| t['imageid'] }
-    p 'we finished the query only problem is the array';
+    # p 'we finished the query only problem is the array';
 
     arr = []
     query(images_sql, user_id).each do |photo|

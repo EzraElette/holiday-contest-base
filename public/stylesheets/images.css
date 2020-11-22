@@ -37,14 +37,7 @@ main.photo-gallery {
   inset 13px 13px 26px #39535e;
 }
 
-figure {
-  display: inline-flex;
-  flex-direction: row;
-  justify-content: center;
-  border: 2px solid #DDC9B4;
-  border-radius: 10px;
-  padding: 10px;
-}
+
 
 figure img {
   display: inline-block;
@@ -127,4 +120,13 @@ form input#image {
   align-self: center;
   vertical-align: center;
   border-radius: 10px;
+}
+figure {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  border: 2px solid #DDC9B4;
+  border-radius: 10px;
+  background-color: #7A6C5D;
+  padding: 10px;
 }

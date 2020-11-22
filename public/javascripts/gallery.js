@@ -3,7 +3,6 @@ $(function () {
 
   $('.vote-button').click(function (event) {
     let request = new XMLHttpRequest();
-      // $(event.target).closest('figure').find('img').attr('id')
     request.open('POST', '/vote')
 
     request.addEventListener('load', function () {

@@ -48,7 +48,7 @@ const theMain = `${theFlash}
             {{/each}}
           {{else}}
             <form id='random-ingredients' action="/add/random/ingredients" method='POST'>
-              <button id='assign-ingredients' type='submit'></button>Get Random Ingredients!</button>
+              <button id='assign-ingredients' type='submit'>Get Random Ingredients!</button>
             </form>
           {{/if}}
         </section>
@@ -116,4 +116,9 @@ function refresh(scope) {
     refresh("header");
     refresh("main");
   }
+}
+
+function toggleMenu() {
+  let nav = document.getElementById("navigation");
+  nav.classList.toggle("responsive");
 }
