@@ -58,11 +58,11 @@ const theLogin = `${theFlash}
     <form id='login-form' action="/login" method="POST">
       <section class='form-input'>
         <label for="username">Username:</label>
-        <input id="username" name="username" type="text">
+        <input id="username" name="username" type="text" required>
       </section>
       <section class='form-input'>
         <label for="password">Password:</label>
-        <input id="password" name="password" type="password">
+        <input id="password" name="password" type="password" required>
       </section>
       <section class='form-input'>
         <button type="submit" id="login-button">Login</button>
@@ -71,10 +71,11 @@ const theLogin = `${theFlash}
 
     <a class='create-account' href="#">Create Account</a>
   </section>`;
-const theCreateAccount = `<form class='create-account' action="/create/account" method="POST">
-            <input class='form-input' type="text" name="username" placeholder="Username" />
-            <input class='form-input' type="password" name="password" placeholder="Password" />
-            <input class='form-input' type="password" name="password2" placeholder="Password2" />
+const theCreateAccount = `${theFlash}
+      <form class='create-account' action="/create/account" method="POST">
+            <input class='form-input' type="text" name="username" placeholder="Username" required />
+            <input class='form-input' type="password" name="password" placeholder="Password" required/>
+            <input class='form-input' type="password" name="password2" placeholder="Password2" required/>
             <input class='form-input' type="submit" name="button" value="Create Account" />
       </form>`;
 const theProfile = `<script id='profileTemplate' type='text/x-handlebars'>
@@ -94,7 +95,7 @@ const loginTemplate = Handlebars.compile(theLogin);
 const createAccountTemplate = Handlebars.compile(theCreateAccount);
 const uploadFormTemplate = Handlebars.compile(theUploadForm);
 const flashTemplate = Handlebars.compile(theFlash);
-// const photosTemplate = Handlebars.compile(thePhotos)     
+// const photosTemplate = Handlebars.compile(thePhotos)
 current = JSON.parse($('#current')[0].textContent);
 function refresh(scope) {
   if (scope === "header") {

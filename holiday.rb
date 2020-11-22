@@ -72,9 +72,9 @@ post '/login' do
   username = escape_html(params[:username])
   password = escape_html(params[:password])
 
-  session[:current] ||= {}
-
   logged_in = verify_credentials(username, password)
+
+  session[:current] ||= {}
 
   redirect '/' unless logged_in
 
