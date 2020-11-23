@@ -4,7 +4,7 @@ require 'sinatra/reloader' if development?
 require 'sinatra/json'
 require 'bcrypt'
 require 'json'
-require_relative 'database_persistence.rb'
+require_relative './database_persistence.rb'
 
 configure do
   enable :sessions
