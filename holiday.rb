@@ -42,6 +42,10 @@ def escape_html(html)
 end
 
 def verify_credentials(username, password)
+  if username == '' || password == ''
+    redirect '/'
+  end
+
   password_hash = @storage.get_user_pass(username)
 
   BCrypt::Password.new(password_hash) == password
