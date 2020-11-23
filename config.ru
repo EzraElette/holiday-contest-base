@@ -1,2 +1,2 @@
-require "./holiday.rb"
+require "./holiday"
 run Sinatra::Application
