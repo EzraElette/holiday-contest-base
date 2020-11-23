@@ -43,11 +43,11 @@ end
 
 def verify_credentials(username, password)
   if username == '' || password == ''
-    redirect '/'
+    return false
   end
 
   password_hash = @storage.get_user_pass(username)
-
+  return false if !password_hash
   BCrypt::Password.new(password_hash) == password
 end
 
