@@ -6,7 +6,6 @@
 
   <script src="javascripts/gallery.js"></script>
 
-  <%# <script src='javascripts/images.js'></script> %>
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -16,14 +15,14 @@
 
 <body>
   <header>
-  
+
   </header>
   <main class="photo-gallery">
 
     <h1 class='section-heading'>Current Submissions</h1>
     <section id='photos'>
       <% @photos.each do |photo| %>
-        <%p photo[:voted]%>
+        <% photo[:voted] %>
         <figure>
           <section class='image'>
             <img src="<%== photo[:src]%>">

@@ -33,7 +33,7 @@ const theMain = `${theFlash}
           <form id='add-ingredients-form' action="/add/ingredient" method="POST">
             <section class='form-input'>
               <label for="ingredient">Add Ingredient:</label>
-              <input id="add-ingredient" name="ingredient" type="text" placeholder='name'>
+              <input id="add-ingredient" name="ingredient" type="text" placeholder='name' required>
             </section>
             <section class='form-input'>
               <button type="submit" class='add-button'>+</button>

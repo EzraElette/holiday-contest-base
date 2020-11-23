@@ -2,14 +2,8 @@
 
 <head>
 
-<% if !!session[:user_id] %>
   <script type="text" id="current">
     <%== session[:current].to_json %>
   </script>
-<% else %>
-  <script type="text" id="current">
-    "{}"
-  </script>
-<% end %>
 
 <%== yield %>

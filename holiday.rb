@@ -23,11 +23,12 @@ end
 
 before do
   @storage = DatabasePersistence.new()
+  session[:current] ||= {}
 end
 
 after do
   @storage.disconnect
-  clear_flash(session) if request.path_info[-1] == '/'
+  clear_flash(session) if request.path_info[-1] != 'logout'
 end
 
 def require_signed_in_user
@@ -51,8 +52,11 @@ def signed_in?
   user_list.include?(session[:username])
 end
 
+def set_flash(message, action)
+  session[:current][:flash] = {'message' => message, 'action' => action}
+end
+
 get '/' do
-  # send_file 'index.html'
   erb :index
 end
 
@@ -62,12 +66,6 @@ get '/profile' do
   erb :profile
 end
 
-# post '/add/ingredient' do
-#   request.body.rewind
-#   # puts(JSON.parse(request.body.read).to_json)
-#   json JSON.parse(request.body.read).to_json
-# end
-
 post '/login' do
   username = escape_html(params[:username])
   password = escape_html(params[:password])
@@ -76,21 +74,21 @@ post '/login' do
 
   session[:current] ||= {}
 
-  redirect '/' unless logged_in
+  unless logged_in
+    set_flash('Invalid username or password.', 'try again')
+    redirect '/'
+  end
 
   session[:user_id] = @storage.get_user_id(username) || nil
-  # p session[:user_id]
+
   session[:username] = username
   response = {}
 
   session[:current][:loggedIn] = logged_in
   session[:current][:person] = {'name' => username, :selectedIngredients => @storage.get_ingredients(username), :randomIngredients => @storage.get_random_ingredients(username) }
-  # response['person'] = {'name' => username, 'selectedIngredients' => []}
-  session[:current][:flash] = {'message' => 'Logged in!', 'action' => 'Happy Thanksgiving week!'}
 
-  # @storage.add_ingredient(params[:add_ingredient], session[:user_id])
+  set_flash('Logged in!', 'Happy Thanksgiving week!')
 
-  # json response.to_json
   redirect '/'
 end
 
@@ -100,7 +98,7 @@ post '/add/ingredient' do
   ingredient_name = params[:ingredient]
   response = {}
   if @storage.get_ingredients(session[:username]).count >= 5
-    session[:current][:flash] = {'message' => 'Max ingredients selected!', 'action' => 'If you haven\'t added random ingredients, do that!'}
+    set_flash('Max ingredients selected!', 'If you haven\'t added random ingredients, do that!')
     redirect '/'
   end
 
@@ -108,15 +106,13 @@ post '/add/ingredient' do
 
   if @storage.add_ingredient(ingredient_name, session[:user_id])
     session[:current][:person][:selectedIngredients] = @storage.get_ingredients(session[:username])
-    # response['ingredient'] = {"name" => ingredient_name};
-    session[:current][:flash] = {'message' => 'Ingredient added!', 'action' => 'You can add more!'}
+
+    set_flash('Ingredient added!', 'You can add more!')
   else
-    session[:flash] = {'message' => 'Ingredient could not be added!', 'action' => 'You can try again!'}
+    set_flash('Ingredient could not be added!', 'You can try again!')
   end
 
-  # json response.to_json
   redirect '/'
-  # erb :index
 end
 
 post '/create/account' do
@@ -128,18 +124,18 @@ post '/create/account' do
 
   if !@storage.username_available?(username)
 
-    session[:current][:flash] = {message: "Username is unavailable!", action: "try a different username."}
+    set_flash("Username is unavailable!", "try a different username.")
     redirect '/'
   end
 
   if password != password2
-    session[:current][:flash] = {message: "Passwords must match!", action: "try again"}
+    set_flash("Passwords must match!", "try again")
     redirect '/'
   end
 
   @storage.add_user(username, BCrypt::Password.create(password))
 
-  session[:current][:flash] = {message: 'You may now log in!', action: ''}
+  set_flash('You may now log in!', 'Account created!')
   redirect '/'
 end
 
@@ -158,16 +154,16 @@ post '/add/random/ingredients' do
   session[:current] ||= {}
 
   if @storage.get_random_ingredients(session[:username]).count > 0
-    session[:current][:flash] = {message:"You already have your random ingredients!", action: "Start cooking."};
+    set_flash("You already have your random ingredients!", "Start cooking.")
     redirect '/'
   end
 
   if @storage.get_ingredients(session[:username]).count < 5
-    session[:current][:flash] = {message:"Please add 5 ingredients first", action: "then you can get your random ingredients"};
+    set_flash("Please add 5 ingredients first", "then you can get your random ingredients")
     redirect '/'
   end
 
-  session[:current][:flash] = {message:" here are your random ingredients!", action: "now, you can make a dish"};
+  set_flash("here are your random ingredients!", "now, you can make a dish")
 
   @storage.add_random_ingredients(session[:username])
 
@@ -193,12 +189,13 @@ post '/add/image' do
 
   @storage.add_image(src, name, uploader)
 
+  set_flash('Image Uploaded', 'would you like to upload more?')
+
   redirect '/photos'
 end
 
 post '/vote' do
   id = request.body.read
-
   @storage.vote_for(id, session[:user_id])
   res = { message: 'You voted!', action: ''}
   json res.to_json
