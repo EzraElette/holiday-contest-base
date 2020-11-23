@@ -1,6 +1,6 @@
 require 'erubis'
 require 'sinatra'
-require 'sinatra/reloader'
+require 'sinatra/reloader' if development?
 require 'sinatra/json'
 require 'bcrypt'
 require 'json'
