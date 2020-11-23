@@ -28,7 +28,7 @@ end
 
 after do
   @storage.disconnect
-  clear_flash(session) unless request.path_info[-1] == 'logout'
+  clear_flash(session) if request.path_info[-1] == '/logout'
 end
 
 def require_signed_in_user
